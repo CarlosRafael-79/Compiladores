@@ -1,0 +1,1508 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    OP_AD
+
+Grammar
+
+Rule 0     S' -> prog
+Rule 1     prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+Rule 2     metodo -> PUBLIC STATIC tipo ID ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE cmds RETURN expressao PONTO_VIRGULA FECHA_CHAVE
+Rule 3     metodo -> vazio
+Rule 4     params -> tipo ID mais_params
+Rule 5     params -> vazio
+Rule 6     mais_params -> VIRGULA params
+Rule 7     mais_params -> vazio
+Rule 8     dc -> var mais_cmds
+Rule 9     var -> tipo vars
+Rule 10    vars -> ID mais_var
+Rule 11    mais_var -> VIRGULA vars
+Rule 12    mais_var -> vazio
+Rule 13    tipo -> DOUBLE
+Rule 14    cmds -> cmd mais_cmds
+Rule 15    cmds -> cmd_cond cmds
+Rule 16    cmds -> dc
+Rule 17    cmds -> vazio
+Rule 18    mais_cmds -> PONTO_VIRGULA cmds
+Rule 19    cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa
+Rule 20    cmd_cond -> WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE
+Rule 21    cmd -> SOUT ABRE_PARENTESE expressao FECHA_PARENTESE
+Rule 22    cmd -> ID resto_ident
+Rule 23    pfalsa -> ELSE ABRE_CHAVE cmds FECHA_CHAVE
+Rule 24    pfalsa -> vazio
+Rule 25    resto_ident -> ATRIBUICAO exp_ident
+Rule 26    resto_ident -> ABRE_PARENTESE lista_arg FECHA_PARENTESE
+Rule 27    lista_arg -> argumentos
+Rule 28    lista_arg -> vazio
+Rule 29    argumentos -> ID mais_ident
+Rule 30    mais_ident -> VIRGULA argumentos
+Rule 31    mais_ident -> vazio
+Rule 32    exp_ident -> expressao
+Rule 33    exp_ident -> LERDOUBLE ABRE_PARENTESE FECHA_PARENTESE
+Rule 34    condicao -> expressao RELACIONAL expressao
+Rule 35    expressao -> termo outros_termos
+Rule 36    termo -> op_un fator mais_fatores
+Rule 37    op_un -> SUBTRACAO
+Rule 38    op_un -> vazio
+Rule 39    fator -> ID
+Rule 40    fator -> NUMERO
+Rule 41    fator -> ABRE_PARENTESE expressao FECHA_PARENTESE
+Rule 42    outros_termos -> ADICAO termo outros_termos
+Rule 43    outros_termos -> SUBTRACAO termo outros_termos
+Rule 44    outros_termos -> vazio
+Rule 45    mais_fatores -> OP_MULT fator mais_fatores
+Rule 46    mais_fatores -> vazio
+Rule 47    vazio -> <empty>
+
+Terminals, with rules where they appear
+
+ABRE_CHAVE           : 1 1 2 19 20 23
+ABRE_COLCHETE        : 1
+ABRE_PARENTESE       : 1 2 19 20 21 26 33 41
+ADICAO               : 42
+ARGS                 : 1
+ATRIBUICAO           : 25
+CLASS                : 1
+DOUBLE               : 13
+ELSE                 : 23
+FECHA_CHAVE          : 1 1 2 19 20 23
+FECHA_COLCHETE       : 1
+FECHA_PARENTESE      : 1 2 19 20 21 26 33 41
+ID                   : 1 2 4 10 22 29 39
+IF                   : 19
+LERDOUBLE            : 33
+MAIN                 : 1
+NUMERO               : 40
+OP_AD                : 
+OP_MULT              : 45
+PONTO_VIRGULA        : 2 18
+PUBLIC               : 1 1 2
+RELACIONAL           : 34
+RETURN               : 2
+SOUT                 : 21
+STATIC               : 1 2
+STRING               : 1
+SUBTRACAO            : 37 43
+VIRGULA              : 6 11 30
+VOID                 : 1
+WHILE                : 20
+error                : 
+
+Nonterminals, with rules where they appear
+
+argumentos           : 27 30
+cmd                  : 14
+cmd_cond             : 15
+cmds                 : 1 2 15 18 19 20 23
+condicao             : 19 20
+dc                   : 16
+exp_ident            : 25
+expressao            : 2 21 32 34 34 41
+fator                : 36 45
+lista_arg            : 26
+mais_cmds            : 8 14
+mais_fatores         : 36 45
+mais_ident           : 29
+mais_params          : 4
+mais_var             : 10
+metodo               : 1
+op_un                : 36
+outros_termos        : 35 42 43
+params               : 2 6
+pfalsa               : 19
+prog                 : 0
+resto_ident          : 22
+termo                : 35 42 43
+tipo                 : 2 4 9
+var                  : 8
+vars                 : 9 11
+vazio                : 3 5 7 12 17 24 28 31 38 44 46
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . prog
+    (1) prog -> . PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    PUBLIC          shift and go to state 2
+
+    prog                           shift and go to state 1
+
+state 1
+
+    (0) S' -> prog .
+
+
+
+state 2
+
+    (1) prog -> PUBLIC . CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    CLASS           shift and go to state 3
+
+
+state 3
+
+    (1) prog -> PUBLIC CLASS . ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    ID              shift and go to state 4
+
+
+state 4
+
+    (1) prog -> PUBLIC CLASS ID . ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    ABRE_CHAVE      shift and go to state 5
+
+
+state 5
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE . PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    PUBLIC          shift and go to state 6
+
+
+state 6
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC . STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    STATIC          shift and go to state 7
+
+
+state 7
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC . VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    VOID            shift and go to state 8
+
+
+state 8
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID . MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    MAIN            shift and go to state 9
+
+
+state 9
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN . ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    ABRE_PARENTESE  shift and go to state 10
+
+
+state 10
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE . STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    STRING          shift and go to state 11
+
+
+state 11
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING . ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    ABRE_COLCHETE   shift and go to state 12
+
+
+state 12
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE . FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    FECHA_COLCHETE  shift and go to state 13
+
+
+state 13
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE . ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    ARGS            shift and go to state 14
+
+
+state 14
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS . FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    FECHA_PARENTESE shift and go to state 15
+
+
+state 15
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE . ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE
+
+    ABRE_CHAVE      shift and go to state 16
+
+
+state 16
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE . cmds FECHA_CHAVE metodo FECHA_CHAVE
+    (14) cmds -> . cmd mais_cmds
+    (15) cmds -> . cmd_cond cmds
+    (16) cmds -> . dc
+    (17) cmds -> . vazio
+    (21) cmd -> . SOUT ABRE_PARENTESE expressao FECHA_PARENTESE
+    (22) cmd -> . ID resto_ident
+    (19) cmd_cond -> . IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa
+    (20) cmd_cond -> . WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE
+    (8) dc -> . var mais_cmds
+    (47) vazio -> .
+    (9) var -> . tipo vars
+    (13) tipo -> . DOUBLE
+
+    SOUT            shift and go to state 23
+    ID              shift and go to state 17
+    IF              shift and go to state 24
+    WHILE           shift and go to state 25
+    FECHA_CHAVE     reduce using rule 47 (vazio -> .)
+    DOUBLE          shift and go to state 28
+
+    cmds                           shift and go to state 18
+    cmd                            shift and go to state 19
+    cmd_cond                       shift and go to state 20
+    dc                             shift and go to state 21
+    vazio                          shift and go to state 22
+    var                            shift and go to state 26
+    tipo                           shift and go to state 27
+
+state 17
+
+    (22) cmd -> ID . resto_ident
+    (25) resto_ident -> . ATRIBUICAO exp_ident
+    (26) resto_ident -> . ABRE_PARENTESE lista_arg FECHA_PARENTESE
+
+    ATRIBUICAO      shift and go to state 30
+    ABRE_PARENTESE  shift and go to state 31
+
+    resto_ident                    shift and go to state 29
+
+state 18
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds . FECHA_CHAVE metodo FECHA_CHAVE
+
+    FECHA_CHAVE     shift and go to state 32
+
+
+state 19
+
+    (14) cmds -> cmd . mais_cmds
+    (18) mais_cmds -> . PONTO_VIRGULA cmds
+
+    PONTO_VIRGULA   shift and go to state 34
+
+    mais_cmds                      shift and go to state 33
+
+state 20
+
+    (15) cmds -> cmd_cond . cmds
+    (14) cmds -> . cmd mais_cmds
+    (15) cmds -> . cmd_cond cmds
+    (16) cmds -> . dc
+    (17) cmds -> . vazio
+    (21) cmd -> . SOUT ABRE_PARENTESE expressao FECHA_PARENTESE
+    (22) cmd -> . ID resto_ident
+    (19) cmd_cond -> . IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa
+    (20) cmd_cond -> . WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE
+    (8) dc -> . var mais_cmds
+    (47) vazio -> .
+    (9) var -> . tipo vars
+    (13) tipo -> . DOUBLE
+
+    SOUT            shift and go to state 23
+    ID              shift and go to state 17
+    IF              shift and go to state 24
+    WHILE           shift and go to state 25
+    FECHA_CHAVE     reduce using rule 47 (vazio -> .)
+    RETURN          reduce using rule 47 (vazio -> .)
+    DOUBLE          shift and go to state 28
+
+    cmd_cond                       shift and go to state 20
+    cmds                           shift and go to state 35
+    cmd                            shift and go to state 19
+    dc                             shift and go to state 21
+    vazio                          shift and go to state 22
+    var                            shift and go to state 26
+    tipo                           shift and go to state 27
+
+state 21
+
+    (16) cmds -> dc .
+
+    FECHA_CHAVE     reduce using rule 16 (cmds -> dc .)
+    RETURN          reduce using rule 16 (cmds -> dc .)
+
+
+state 22
+
+    (17) cmds -> vazio .
+
+    FECHA_CHAVE     reduce using rule 17 (cmds -> vazio .)
+    RETURN          reduce using rule 17 (cmds -> vazio .)
+
+
+state 23
+
+    (21) cmd -> SOUT . ABRE_PARENTESE expressao FECHA_PARENTESE
+
+    ABRE_PARENTESE  shift and go to state 36
+
+
+state 24
+
+    (19) cmd_cond -> IF . ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa
+
+    ABRE_PARENTESE  shift and go to state 37
+
+
+state 25
+
+    (20) cmd_cond -> WHILE . ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE
+
+    ABRE_PARENTESE  shift and go to state 38
+
+
+state 26
+
+    (8) dc -> var . mais_cmds
+    (18) mais_cmds -> . PONTO_VIRGULA cmds
+
+    PONTO_VIRGULA   shift and go to state 34
+
+    mais_cmds                      shift and go to state 39
+
+state 27
+
+    (9) var -> tipo . vars
+    (10) vars -> . ID mais_var
+
+    ID              shift and go to state 41
+
+    vars                           shift and go to state 40
+
+state 28
+
+    (13) tipo -> DOUBLE .
+
+    ID              reduce using rule 13 (tipo -> DOUBLE .)
+
+
+state 29
+
+    (22) cmd -> ID resto_ident .
+
+    PONTO_VIRGULA   reduce using rule 22 (cmd -> ID resto_ident .)
+
+
+state 30
+
+    (25) resto_ident -> ATRIBUICAO . exp_ident
+    (32) exp_ident -> . expressao
+    (33) exp_ident -> . LERDOUBLE ABRE_PARENTESE FECHA_PARENTESE
+    (35) expressao -> . termo outros_termos
+    (36) termo -> . op_un fator mais_fatores
+    (37) op_un -> . SUBTRACAO
+    (38) op_un -> . vazio
+    (47) vazio -> .
+
+    LERDOUBLE       shift and go to state 44
+    SUBTRACAO       shift and go to state 47
+    ID              reduce using rule 47 (vazio -> .)
+    NUMERO          reduce using rule 47 (vazio -> .)
+    ABRE_PARENTESE  reduce using rule 47 (vazio -> .)
+
+    exp_ident                      shift and go to state 42
+    expressao                      shift and go to state 43
+    termo                          shift and go to state 45
+    op_un                          shift and go to state 46
+    vazio                          shift and go to state 48
+
+state 31
+
+    (26) resto_ident -> ABRE_PARENTESE . lista_arg FECHA_PARENTESE
+    (27) lista_arg -> . argumentos
+    (28) lista_arg -> . vazio
+    (29) argumentos -> . ID mais_ident
+    (47) vazio -> .
+
+    ID              shift and go to state 52
+    FECHA_PARENTESE reduce using rule 47 (vazio -> .)
+
+    lista_arg                      shift and go to state 49
+    argumentos                     shift and go to state 50
+    vazio                          shift and go to state 51
+
+state 32
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE . metodo FECHA_CHAVE
+    (2) metodo -> . PUBLIC STATIC tipo ID ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE cmds RETURN expressao PONTO_VIRGULA FECHA_CHAVE
+    (3) metodo -> . vazio
+    (47) vazio -> .
+
+    PUBLIC          shift and go to state 53
+    FECHA_CHAVE     reduce using rule 47 (vazio -> .)
+
+    metodo                         shift and go to state 54
+    vazio                          shift and go to state 55
+
+state 33
+
+    (14) cmds -> cmd mais_cmds .
+
+    FECHA_CHAVE     reduce using rule 14 (cmds -> cmd mais_cmds .)
+    RETURN          reduce using rule 14 (cmds -> cmd mais_cmds .)
+
+
+state 34
+
+    (18) mais_cmds -> PONTO_VIRGULA . cmds
+    (14) cmds -> . cmd mais_cmds
+    (15) cmds -> . cmd_cond cmds
+    (16) cmds -> . dc
+    (17) cmds -> . vazio
+    (21) cmd -> . SOUT ABRE_PARENTESE expressao FECHA_PARENTESE
+    (22) cmd -> . ID resto_ident
+    (19) cmd_cond -> . IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa
+    (20) cmd_cond -> . WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE
+    (8) dc -> . var mais_cmds
+    (47) vazio -> .
+    (9) var -> . tipo vars
+    (13) tipo -> . DOUBLE
+
+    SOUT            shift and go to state 23
+    ID              shift and go to state 17
+    IF              shift and go to state 24
+    WHILE           shift and go to state 25
+    FECHA_CHAVE     reduce using rule 47 (vazio -> .)
+    RETURN          reduce using rule 47 (vazio -> .)
+    DOUBLE          shift and go to state 28
+
+    cmds                           shift and go to state 56
+    cmd                            shift and go to state 19
+    cmd_cond                       shift and go to state 20
+    dc                             shift and go to state 21
+    vazio                          shift and go to state 22
+    var                            shift and go to state 26
+    tipo                           shift and go to state 27
+
+state 35
+
+    (15) cmds -> cmd_cond cmds .
+
+    FECHA_CHAVE     reduce using rule 15 (cmds -> cmd_cond cmds .)
+    RETURN          reduce using rule 15 (cmds -> cmd_cond cmds .)
+
+
+state 36
+
+    (21) cmd -> SOUT ABRE_PARENTESE . expressao FECHA_PARENTESE
+    (35) expressao -> . termo outros_termos
+    (36) termo -> . op_un fator mais_fatores
+    (37) op_un -> . SUBTRACAO
+    (38) op_un -> . vazio
+    (47) vazio -> .
+
+    SUBTRACAO       shift and go to state 47
+    ID              reduce using rule 47 (vazio -> .)
+    NUMERO          reduce using rule 47 (vazio -> .)
+    ABRE_PARENTESE  reduce using rule 47 (vazio -> .)
+
+    expressao                      shift and go to state 57
+    termo                          shift and go to state 45
+    op_un                          shift and go to state 46
+    vazio                          shift and go to state 48
+
+state 37
+
+    (19) cmd_cond -> IF ABRE_PARENTESE . condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa
+    (34) condicao -> . expressao RELACIONAL expressao
+    (35) expressao -> . termo outros_termos
+    (36) termo -> . op_un fator mais_fatores
+    (37) op_un -> . SUBTRACAO
+    (38) op_un -> . vazio
+    (47) vazio -> .
+
+    SUBTRACAO       shift and go to state 47
+    ID              reduce using rule 47 (vazio -> .)
+    NUMERO          reduce using rule 47 (vazio -> .)
+    ABRE_PARENTESE  reduce using rule 47 (vazio -> .)
+
+    condicao                       shift and go to state 58
+    expressao                      shift and go to state 59
+    termo                          shift and go to state 45
+    op_un                          shift and go to state 46
+    vazio                          shift and go to state 48
+
+state 38
+
+    (20) cmd_cond -> WHILE ABRE_PARENTESE . condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE
+    (34) condicao -> . expressao RELACIONAL expressao
+    (35) expressao -> . termo outros_termos
+    (36) termo -> . op_un fator mais_fatores
+    (37) op_un -> . SUBTRACAO
+    (38) op_un -> . vazio
+    (47) vazio -> .
+
+    SUBTRACAO       shift and go to state 47
+    ID              reduce using rule 47 (vazio -> .)
+    NUMERO          reduce using rule 47 (vazio -> .)
+    ABRE_PARENTESE  reduce using rule 47 (vazio -> .)
+
+    condicao                       shift and go to state 60
+    expressao                      shift and go to state 59
+    termo                          shift and go to state 45
+    op_un                          shift and go to state 46
+    vazio                          shift and go to state 48
+
+state 39
+
+    (8) dc -> var mais_cmds .
+
+    FECHA_CHAVE     reduce using rule 8 (dc -> var mais_cmds .)
+    RETURN          reduce using rule 8 (dc -> var mais_cmds .)
+
+
+state 40
+
+    (9) var -> tipo vars .
+
+    PONTO_VIRGULA   reduce using rule 9 (var -> tipo vars .)
+
+
+state 41
+
+    (10) vars -> ID . mais_var
+    (11) mais_var -> . VIRGULA vars
+    (12) mais_var -> . vazio
+    (47) vazio -> .
+
+    VIRGULA         shift and go to state 62
+    PONTO_VIRGULA   reduce using rule 47 (vazio -> .)
+
+    mais_var                       shift and go to state 61
+    vazio                          shift and go to state 63
+
+state 42
+
+    (25) resto_ident -> ATRIBUICAO exp_ident .
+
+    PONTO_VIRGULA   reduce using rule 25 (resto_ident -> ATRIBUICAO exp_ident .)
+
+
+state 43
+
+    (32) exp_ident -> expressao .
+
+    PONTO_VIRGULA   reduce using rule 32 (exp_ident -> expressao .)
+
+
+state 44
+
+    (33) exp_ident -> LERDOUBLE . ABRE_PARENTESE FECHA_PARENTESE
+
+    ABRE_PARENTESE  shift and go to state 64
+
+
+state 45
+
+    (35) expressao -> termo . outros_termos
+    (42) outros_termos -> . ADICAO termo outros_termos
+    (43) outros_termos -> . SUBTRACAO termo outros_termos
+    (44) outros_termos -> . vazio
+    (47) vazio -> .
+
+    ADICAO          shift and go to state 66
+    SUBTRACAO       shift and go to state 67
+    PONTO_VIRGULA   reduce using rule 47 (vazio -> .)
+    FECHA_PARENTESE reduce using rule 47 (vazio -> .)
+    RELACIONAL      reduce using rule 47 (vazio -> .)
+
+    outros_termos                  shift and go to state 65
+    vazio                          shift and go to state 68
+
+state 46
+
+    (36) termo -> op_un . fator mais_fatores
+    (39) fator -> . ID
+    (40) fator -> . NUMERO
+    (41) fator -> . ABRE_PARENTESE expressao FECHA_PARENTESE
+
+    ID              shift and go to state 70
+    NUMERO          shift and go to state 71
+    ABRE_PARENTESE  shift and go to state 72
+
+    fator                          shift and go to state 69
+
+state 47
+
+    (37) op_un -> SUBTRACAO .
+
+    ID              reduce using rule 37 (op_un -> SUBTRACAO .)
+    NUMERO          reduce using rule 37 (op_un -> SUBTRACAO .)
+    ABRE_PARENTESE  reduce using rule 37 (op_un -> SUBTRACAO .)
+
+
+state 48
+
+    (38) op_un -> vazio .
+
+    ID              reduce using rule 38 (op_un -> vazio .)
+    NUMERO          reduce using rule 38 (op_un -> vazio .)
+    ABRE_PARENTESE  reduce using rule 38 (op_un -> vazio .)
+
+
+state 49
+
+    (26) resto_ident -> ABRE_PARENTESE lista_arg . FECHA_PARENTESE
+
+    FECHA_PARENTESE shift and go to state 73
+
+
+state 50
+
+    (27) lista_arg -> argumentos .
+
+    FECHA_PARENTESE reduce using rule 27 (lista_arg -> argumentos .)
+
+
+state 51
+
+    (28) lista_arg -> vazio .
+
+    FECHA_PARENTESE reduce using rule 28 (lista_arg -> vazio .)
+
+
+state 52
+
+    (29) argumentos -> ID . mais_ident
+    (30) mais_ident -> . VIRGULA argumentos
+    (31) mais_ident -> . vazio
+    (47) vazio -> .
+
+    VIRGULA         shift and go to state 75
+    FECHA_PARENTESE reduce using rule 47 (vazio -> .)
+
+    mais_ident                     shift and go to state 74
+    vazio                          shift and go to state 76
+
+state 53
+
+    (2) metodo -> PUBLIC . STATIC tipo ID ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE cmds RETURN expressao PONTO_VIRGULA FECHA_CHAVE
+
+    STATIC          shift and go to state 77
+
+
+state 54
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo . FECHA_CHAVE
+
+    FECHA_CHAVE     shift and go to state 78
+
+
+state 55
+
+    (3) metodo -> vazio .
+
+    FECHA_CHAVE     reduce using rule 3 (metodo -> vazio .)
+
+
+state 56
+
+    (18) mais_cmds -> PONTO_VIRGULA cmds .
+
+    FECHA_CHAVE     reduce using rule 18 (mais_cmds -> PONTO_VIRGULA cmds .)
+    RETURN          reduce using rule 18 (mais_cmds -> PONTO_VIRGULA cmds .)
+
+
+state 57
+
+    (21) cmd -> SOUT ABRE_PARENTESE expressao . FECHA_PARENTESE
+
+    FECHA_PARENTESE shift and go to state 79
+
+
+state 58
+
+    (19) cmd_cond -> IF ABRE_PARENTESE condicao . FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa
+
+    FECHA_PARENTESE shift and go to state 80
+
+
+state 59
+
+    (34) condicao -> expressao . RELACIONAL expressao
+
+    RELACIONAL      shift and go to state 81
+
+
+state 60
+
+    (20) cmd_cond -> WHILE ABRE_PARENTESE condicao . FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE
+
+    FECHA_PARENTESE shift and go to state 82
+
+
+state 61
+
+    (10) vars -> ID mais_var .
+
+    PONTO_VIRGULA   reduce using rule 10 (vars -> ID mais_var .)
+
+
+state 62
+
+    (11) mais_var -> VIRGULA . vars
+    (10) vars -> . ID mais_var
+
+    ID              shift and go to state 41
+
+    vars                           shift and go to state 83
+
+state 63
+
+    (12) mais_var -> vazio .
+
+    PONTO_VIRGULA   reduce using rule 12 (mais_var -> vazio .)
+
+
+state 64
+
+    (33) exp_ident -> LERDOUBLE ABRE_PARENTESE . FECHA_PARENTESE
+
+    FECHA_PARENTESE shift and go to state 84
+
+
+state 65
+
+    (35) expressao -> termo outros_termos .
+
+    PONTO_VIRGULA   reduce using rule 35 (expressao -> termo outros_termos .)
+    FECHA_PARENTESE reduce using rule 35 (expressao -> termo outros_termos .)
+    RELACIONAL      reduce using rule 35 (expressao -> termo outros_termos .)
+
+
+state 66
+
+    (42) outros_termos -> ADICAO . termo outros_termos
+    (36) termo -> . op_un fator mais_fatores
+    (37) op_un -> . SUBTRACAO
+    (38) op_un -> . vazio
+    (47) vazio -> .
+
+    SUBTRACAO       shift and go to state 47
+    ID              reduce using rule 47 (vazio -> .)
+    NUMERO          reduce using rule 47 (vazio -> .)
+    ABRE_PARENTESE  reduce using rule 47 (vazio -> .)
+
+    termo                          shift and go to state 85
+    op_un                          shift and go to state 46
+    vazio                          shift and go to state 48
+
+state 67
+
+    (43) outros_termos -> SUBTRACAO . termo outros_termos
+    (36) termo -> . op_un fator mais_fatores
+    (37) op_un -> . SUBTRACAO
+    (38) op_un -> . vazio
+    (47) vazio -> .
+
+    SUBTRACAO       shift and go to state 47
+    ID              reduce using rule 47 (vazio -> .)
+    NUMERO          reduce using rule 47 (vazio -> .)
+    ABRE_PARENTESE  reduce using rule 47 (vazio -> .)
+
+    termo                          shift and go to state 86
+    op_un                          shift and go to state 46
+    vazio                          shift and go to state 48
+
+state 68
+
+    (44) outros_termos -> vazio .
+
+    PONTO_VIRGULA   reduce using rule 44 (outros_termos -> vazio .)
+    FECHA_PARENTESE reduce using rule 44 (outros_termos -> vazio .)
+    RELACIONAL      reduce using rule 44 (outros_termos -> vazio .)
+
+
+state 69
+
+    (36) termo -> op_un fator . mais_fatores
+    (45) mais_fatores -> . OP_MULT fator mais_fatores
+    (46) mais_fatores -> . vazio
+    (47) vazio -> .
+
+    OP_MULT         shift and go to state 88
+    ADICAO          reduce using rule 47 (vazio -> .)
+    SUBTRACAO       reduce using rule 47 (vazio -> .)
+    PONTO_VIRGULA   reduce using rule 47 (vazio -> .)
+    FECHA_PARENTESE reduce using rule 47 (vazio -> .)
+    RELACIONAL      reduce using rule 47 (vazio -> .)
+
+    mais_fatores                   shift and go to state 87
+    vazio                          shift and go to state 89
+
+state 70
+
+    (39) fator -> ID .
+
+    OP_MULT         reduce using rule 39 (fator -> ID .)
+    ADICAO          reduce using rule 39 (fator -> ID .)
+    SUBTRACAO       reduce using rule 39 (fator -> ID .)
+    PONTO_VIRGULA   reduce using rule 39 (fator -> ID .)
+    FECHA_PARENTESE reduce using rule 39 (fator -> ID .)
+    RELACIONAL      reduce using rule 39 (fator -> ID .)
+
+
+state 71
+
+    (40) fator -> NUMERO .
+
+    OP_MULT         reduce using rule 40 (fator -> NUMERO .)
+    ADICAO          reduce using rule 40 (fator -> NUMERO .)
+    SUBTRACAO       reduce using rule 40 (fator -> NUMERO .)
+    PONTO_VIRGULA   reduce using rule 40 (fator -> NUMERO .)
+    FECHA_PARENTESE reduce using rule 40 (fator -> NUMERO .)
+    RELACIONAL      reduce using rule 40 (fator -> NUMERO .)
+
+
+state 72
+
+    (41) fator -> ABRE_PARENTESE . expressao FECHA_PARENTESE
+    (35) expressao -> . termo outros_termos
+    (36) termo -> . op_un fator mais_fatores
+    (37) op_un -> . SUBTRACAO
+    (38) op_un -> . vazio
+    (47) vazio -> .
+
+    SUBTRACAO       shift and go to state 47
+    ID              reduce using rule 47 (vazio -> .)
+    NUMERO          reduce using rule 47 (vazio -> .)
+    ABRE_PARENTESE  reduce using rule 47 (vazio -> .)
+
+    expressao                      shift and go to state 90
+    termo                          shift and go to state 45
+    op_un                          shift and go to state 46
+    vazio                          shift and go to state 48
+
+state 73
+
+    (26) resto_ident -> ABRE_PARENTESE lista_arg FECHA_PARENTESE .
+
+    PONTO_VIRGULA   reduce using rule 26 (resto_ident -> ABRE_PARENTESE lista_arg FECHA_PARENTESE .)
+
+
+state 74
+
+    (29) argumentos -> ID mais_ident .
+
+    FECHA_PARENTESE reduce using rule 29 (argumentos -> ID mais_ident .)
+
+
+state 75
+
+    (30) mais_ident -> VIRGULA . argumentos
+    (29) argumentos -> . ID mais_ident
+
+    ID              shift and go to state 52
+
+    argumentos                     shift and go to state 91
+
+state 76
+
+    (31) mais_ident -> vazio .
+
+    FECHA_PARENTESE reduce using rule 31 (mais_ident -> vazio .)
+
+
+state 77
+
+    (2) metodo -> PUBLIC STATIC . tipo ID ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE cmds RETURN expressao PONTO_VIRGULA FECHA_CHAVE
+    (13) tipo -> . DOUBLE
+
+    DOUBLE          shift and go to state 28
+
+    tipo                           shift and go to state 92
+
+state 78
+
+    (1) prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE .
+
+    $end            reduce using rule 1 (prog -> PUBLIC CLASS ID ABRE_CHAVE PUBLIC STATIC VOID MAIN ABRE_PARENTESE STRING ABRE_COLCHETE FECHA_COLCHETE ARGS FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE metodo FECHA_CHAVE .)
+
+
+state 79
+
+    (21) cmd -> SOUT ABRE_PARENTESE expressao FECHA_PARENTESE .
+
+    PONTO_VIRGULA   reduce using rule 21 (cmd -> SOUT ABRE_PARENTESE expressao FECHA_PARENTESE .)
+
+
+state 80
+
+    (19) cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE . ABRE_CHAVE cmds FECHA_CHAVE pfalsa
+
+    ABRE_CHAVE      shift and go to state 93
+
+
+state 81
+
+    (34) condicao -> expressao RELACIONAL . expressao
+    (35) expressao -> . termo outros_termos
+    (36) termo -> . op_un fator mais_fatores
+    (37) op_un -> . SUBTRACAO
+    (38) op_un -> . vazio
+    (47) vazio -> .
+
+    SUBTRACAO       shift and go to state 47
+    ID              reduce using rule 47 (vazio -> .)
+    NUMERO          reduce using rule 47 (vazio -> .)
+    ABRE_PARENTESE  reduce using rule 47 (vazio -> .)
+
+    expressao                      shift and go to state 94
+    termo                          shift and go to state 45
+    op_un                          shift and go to state 46
+    vazio                          shift and go to state 48
+
+state 82
+
+    (20) cmd_cond -> WHILE ABRE_PARENTESE condicao FECHA_PARENTESE . ABRE_CHAVE cmds FECHA_CHAVE
+
+    ABRE_CHAVE      shift and go to state 95
+
+
+state 83
+
+    (11) mais_var -> VIRGULA vars .
+
+    PONTO_VIRGULA   reduce using rule 11 (mais_var -> VIRGULA vars .)
+
+
+state 84
+
+    (33) exp_ident -> LERDOUBLE ABRE_PARENTESE FECHA_PARENTESE .
+
+    PONTO_VIRGULA   reduce using rule 33 (exp_ident -> LERDOUBLE ABRE_PARENTESE FECHA_PARENTESE .)
+
+
+state 85
+
+    (42) outros_termos -> ADICAO termo . outros_termos
+    (42) outros_termos -> . ADICAO termo outros_termos
+    (43) outros_termos -> . SUBTRACAO termo outros_termos
+    (44) outros_termos -> . vazio
+    (47) vazio -> .
+
+    ADICAO          shift and go to state 66
+    SUBTRACAO       shift and go to state 67
+    PONTO_VIRGULA   reduce using rule 47 (vazio -> .)
+    FECHA_PARENTESE reduce using rule 47 (vazio -> .)
+    RELACIONAL      reduce using rule 47 (vazio -> .)
+
+    outros_termos                  shift and go to state 96
+    vazio                          shift and go to state 68
+
+state 86
+
+    (43) outros_termos -> SUBTRACAO termo . outros_termos
+    (42) outros_termos -> . ADICAO termo outros_termos
+    (43) outros_termos -> . SUBTRACAO termo outros_termos
+    (44) outros_termos -> . vazio
+    (47) vazio -> .
+
+    ADICAO          shift and go to state 66
+    SUBTRACAO       shift and go to state 67
+    PONTO_VIRGULA   reduce using rule 47 (vazio -> .)
+    FECHA_PARENTESE reduce using rule 47 (vazio -> .)
+    RELACIONAL      reduce using rule 47 (vazio -> .)
+
+    outros_termos                  shift and go to state 97
+    vazio                          shift and go to state 68
+
+state 87
+
+    (36) termo -> op_un fator mais_fatores .
+
+    ADICAO          reduce using rule 36 (termo -> op_un fator mais_fatores .)
+    SUBTRACAO       reduce using rule 36 (termo -> op_un fator mais_fatores .)
+    PONTO_VIRGULA   reduce using rule 36 (termo -> op_un fator mais_fatores .)
+    FECHA_PARENTESE reduce using rule 36 (termo -> op_un fator mais_fatores .)
+    RELACIONAL      reduce using rule 36 (termo -> op_un fator mais_fatores .)
+
+
+state 88
+
+    (45) mais_fatores -> OP_MULT . fator mais_fatores
+    (39) fator -> . ID
+    (40) fator -> . NUMERO
+    (41) fator -> . ABRE_PARENTESE expressao FECHA_PARENTESE
+
+    ID              shift and go to state 70
+    NUMERO          shift and go to state 71
+    ABRE_PARENTESE  shift and go to state 72
+
+    fator                          shift and go to state 98
+
+state 89
+
+    (46) mais_fatores -> vazio .
+
+    ADICAO          reduce using rule 46 (mais_fatores -> vazio .)
+    SUBTRACAO       reduce using rule 46 (mais_fatores -> vazio .)
+    PONTO_VIRGULA   reduce using rule 46 (mais_fatores -> vazio .)
+    FECHA_PARENTESE reduce using rule 46 (mais_fatores -> vazio .)
+    RELACIONAL      reduce using rule 46 (mais_fatores -> vazio .)
+
+
+state 90
+
+    (41) fator -> ABRE_PARENTESE expressao . FECHA_PARENTESE
+
+    FECHA_PARENTESE shift and go to state 99
+
+
+state 91
+
+    (30) mais_ident -> VIRGULA argumentos .
+
+    FECHA_PARENTESE reduce using rule 30 (mais_ident -> VIRGULA argumentos .)
+
+
+state 92
+
+    (2) metodo -> PUBLIC STATIC tipo . ID ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE cmds RETURN expressao PONTO_VIRGULA FECHA_CHAVE
+
+    ID              shift and go to state 100
+
+
+state 93
+
+    (19) cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE . cmds FECHA_CHAVE pfalsa
+    (14) cmds -> . cmd mais_cmds
+    (15) cmds -> . cmd_cond cmds
+    (16) cmds -> . dc
+    (17) cmds -> . vazio
+    (21) cmd -> . SOUT ABRE_PARENTESE expressao FECHA_PARENTESE
+    (22) cmd -> . ID resto_ident
+    (19) cmd_cond -> . IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa
+    (20) cmd_cond -> . WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE
+    (8) dc -> . var mais_cmds
+    (47) vazio -> .
+    (9) var -> . tipo vars
+    (13) tipo -> . DOUBLE
+
+    SOUT            shift and go to state 23
+    ID              shift and go to state 17
+    IF              shift and go to state 24
+    WHILE           shift and go to state 25
+    FECHA_CHAVE     reduce using rule 47 (vazio -> .)
+    DOUBLE          shift and go to state 28
+
+    cmds                           shift and go to state 101
+    cmd                            shift and go to state 19
+    cmd_cond                       shift and go to state 20
+    dc                             shift and go to state 21
+    vazio                          shift and go to state 22
+    var                            shift and go to state 26
+    tipo                           shift and go to state 27
+
+state 94
+
+    (34) condicao -> expressao RELACIONAL expressao .
+
+    FECHA_PARENTESE reduce using rule 34 (condicao -> expressao RELACIONAL expressao .)
+
+
+state 95
+
+    (20) cmd_cond -> WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE . cmds FECHA_CHAVE
+    (14) cmds -> . cmd mais_cmds
+    (15) cmds -> . cmd_cond cmds
+    (16) cmds -> . dc
+    (17) cmds -> . vazio
+    (21) cmd -> . SOUT ABRE_PARENTESE expressao FECHA_PARENTESE
+    (22) cmd -> . ID resto_ident
+    (19) cmd_cond -> . IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa
+    (20) cmd_cond -> . WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE
+    (8) dc -> . var mais_cmds
+    (47) vazio -> .
+    (9) var -> . tipo vars
+    (13) tipo -> . DOUBLE
+
+    SOUT            shift and go to state 23
+    ID              shift and go to state 17
+    IF              shift and go to state 24
+    WHILE           shift and go to state 25
+    FECHA_CHAVE     reduce using rule 47 (vazio -> .)
+    DOUBLE          shift and go to state 28
+
+    cmds                           shift and go to state 102
+    cmd                            shift and go to state 19
+    cmd_cond                       shift and go to state 20
+    dc                             shift and go to state 21
+    vazio                          shift and go to state 22
+    var                            shift and go to state 26
+    tipo                           shift and go to state 27
+
+state 96
+
+    (42) outros_termos -> ADICAO termo outros_termos .
+
+    PONTO_VIRGULA   reduce using rule 42 (outros_termos -> ADICAO termo outros_termos .)
+    FECHA_PARENTESE reduce using rule 42 (outros_termos -> ADICAO termo outros_termos .)
+    RELACIONAL      reduce using rule 42 (outros_termos -> ADICAO termo outros_termos .)
+
+
+state 97
+
+    (43) outros_termos -> SUBTRACAO termo outros_termos .
+
+    PONTO_VIRGULA   reduce using rule 43 (outros_termos -> SUBTRACAO termo outros_termos .)
+    FECHA_PARENTESE reduce using rule 43 (outros_termos -> SUBTRACAO termo outros_termos .)
+    RELACIONAL      reduce using rule 43 (outros_termos -> SUBTRACAO termo outros_termos .)
+
+
+state 98
+
+    (45) mais_fatores -> OP_MULT fator . mais_fatores
+    (45) mais_fatores -> . OP_MULT fator mais_fatores
+    (46) mais_fatores -> . vazio
+    (47) vazio -> .
+
+    OP_MULT         shift and go to state 88
+    ADICAO          reduce using rule 47 (vazio -> .)
+    SUBTRACAO       reduce using rule 47 (vazio -> .)
+    PONTO_VIRGULA   reduce using rule 47 (vazio -> .)
+    FECHA_PARENTESE reduce using rule 47 (vazio -> .)
+    RELACIONAL      reduce using rule 47 (vazio -> .)
+
+    mais_fatores                   shift and go to state 103
+    vazio                          shift and go to state 89
+
+state 99
+
+    (41) fator -> ABRE_PARENTESE expressao FECHA_PARENTESE .
+
+    OP_MULT         reduce using rule 41 (fator -> ABRE_PARENTESE expressao FECHA_PARENTESE .)
+    ADICAO          reduce using rule 41 (fator -> ABRE_PARENTESE expressao FECHA_PARENTESE .)
+    SUBTRACAO       reduce using rule 41 (fator -> ABRE_PARENTESE expressao FECHA_PARENTESE .)
+    PONTO_VIRGULA   reduce using rule 41 (fator -> ABRE_PARENTESE expressao FECHA_PARENTESE .)
+    FECHA_PARENTESE reduce using rule 41 (fator -> ABRE_PARENTESE expressao FECHA_PARENTESE .)
+    RELACIONAL      reduce using rule 41 (fator -> ABRE_PARENTESE expressao FECHA_PARENTESE .)
+
+
+state 100
+
+    (2) metodo -> PUBLIC STATIC tipo ID . ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE cmds RETURN expressao PONTO_VIRGULA FECHA_CHAVE
+
+    ABRE_PARENTESE  shift and go to state 104
+
+
+state 101
+
+    (19) cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds . FECHA_CHAVE pfalsa
+
+    FECHA_CHAVE     shift and go to state 105
+
+
+state 102
+
+    (20) cmd_cond -> WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds . FECHA_CHAVE
+
+    FECHA_CHAVE     shift and go to state 106
+
+
+state 103
+
+    (45) mais_fatores -> OP_MULT fator mais_fatores .
+
+    ADICAO          reduce using rule 45 (mais_fatores -> OP_MULT fator mais_fatores .)
+    SUBTRACAO       reduce using rule 45 (mais_fatores -> OP_MULT fator mais_fatores .)
+    PONTO_VIRGULA   reduce using rule 45 (mais_fatores -> OP_MULT fator mais_fatores .)
+    FECHA_PARENTESE reduce using rule 45 (mais_fatores -> OP_MULT fator mais_fatores .)
+    RELACIONAL      reduce using rule 45 (mais_fatores -> OP_MULT fator mais_fatores .)
+
+
+state 104
+
+    (2) metodo -> PUBLIC STATIC tipo ID ABRE_PARENTESE . params FECHA_PARENTESE ABRE_CHAVE cmds RETURN expressao PONTO_VIRGULA FECHA_CHAVE
+    (4) params -> . tipo ID mais_params
+    (5) params -> . vazio
+    (13) tipo -> . DOUBLE
+    (47) vazio -> .
+
+    DOUBLE          shift and go to state 28
+    FECHA_PARENTESE reduce using rule 47 (vazio -> .)
+
+    tipo                           shift and go to state 107
+    params                         shift and go to state 108
+    vazio                          shift and go to state 109
+
+state 105
+
+    (19) cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE . pfalsa
+    (23) pfalsa -> . ELSE ABRE_CHAVE cmds FECHA_CHAVE
+    (24) pfalsa -> . vazio
+    (47) vazio -> .
+
+    ELSE            shift and go to state 111
+    SOUT            reduce using rule 47 (vazio -> .)
+    ID              reduce using rule 47 (vazio -> .)
+    IF              reduce using rule 47 (vazio -> .)
+    WHILE           reduce using rule 47 (vazio -> .)
+    DOUBLE          reduce using rule 47 (vazio -> .)
+    FECHA_CHAVE     reduce using rule 47 (vazio -> .)
+    RETURN          reduce using rule 47 (vazio -> .)
+
+    pfalsa                         shift and go to state 110
+    vazio                          shift and go to state 112
+
+state 106
+
+    (20) cmd_cond -> WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE .
+
+    SOUT            reduce using rule 20 (cmd_cond -> WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE .)
+    ID              reduce using rule 20 (cmd_cond -> WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE .)
+    IF              reduce using rule 20 (cmd_cond -> WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE .)
+    WHILE           reduce using rule 20 (cmd_cond -> WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE .)
+    DOUBLE          reduce using rule 20 (cmd_cond -> WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE .)
+    FECHA_CHAVE     reduce using rule 20 (cmd_cond -> WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE .)
+    RETURN          reduce using rule 20 (cmd_cond -> WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE .)
+
+
+state 107
+
+    (4) params -> tipo . ID mais_params
+
+    ID              shift and go to state 113
+
+
+state 108
+
+    (2) metodo -> PUBLIC STATIC tipo ID ABRE_PARENTESE params . FECHA_PARENTESE ABRE_CHAVE cmds RETURN expressao PONTO_VIRGULA FECHA_CHAVE
+
+    FECHA_PARENTESE shift and go to state 114
+
+
+state 109
+
+    (5) params -> vazio .
+
+    FECHA_PARENTESE reduce using rule 5 (params -> vazio .)
+
+
+state 110
+
+    (19) cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa .
+
+    SOUT            reduce using rule 19 (cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa .)
+    ID              reduce using rule 19 (cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa .)
+    IF              reduce using rule 19 (cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa .)
+    WHILE           reduce using rule 19 (cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa .)
+    DOUBLE          reduce using rule 19 (cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa .)
+    FECHA_CHAVE     reduce using rule 19 (cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa .)
+    RETURN          reduce using rule 19 (cmd_cond -> IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa .)
+
+
+state 111
+
+    (23) pfalsa -> ELSE . ABRE_CHAVE cmds FECHA_CHAVE
+
+    ABRE_CHAVE      shift and go to state 115
+
+
+state 112
+
+    (24) pfalsa -> vazio .
+
+    SOUT            reduce using rule 24 (pfalsa -> vazio .)
+    ID              reduce using rule 24 (pfalsa -> vazio .)
+    IF              reduce using rule 24 (pfalsa -> vazio .)
+    WHILE           reduce using rule 24 (pfalsa -> vazio .)
+    DOUBLE          reduce using rule 24 (pfalsa -> vazio .)
+    FECHA_CHAVE     reduce using rule 24 (pfalsa -> vazio .)
+    RETURN          reduce using rule 24 (pfalsa -> vazio .)
+
+
+state 113
+
+    (4) params -> tipo ID . mais_params
+    (6) mais_params -> . VIRGULA params
+    (7) mais_params -> . vazio
+    (47) vazio -> .
+
+    VIRGULA         shift and go to state 117
+    FECHA_PARENTESE reduce using rule 47 (vazio -> .)
+
+    mais_params                    shift and go to state 116
+    vazio                          shift and go to state 118
+
+state 114
+
+    (2) metodo -> PUBLIC STATIC tipo ID ABRE_PARENTESE params FECHA_PARENTESE . ABRE_CHAVE cmds RETURN expressao PONTO_VIRGULA FECHA_CHAVE
+
+    ABRE_CHAVE      shift and go to state 119
+
+
+state 115
+
+    (23) pfalsa -> ELSE ABRE_CHAVE . cmds FECHA_CHAVE
+    (14) cmds -> . cmd mais_cmds
+    (15) cmds -> . cmd_cond cmds
+    (16) cmds -> . dc
+    (17) cmds -> . vazio
+    (21) cmd -> . SOUT ABRE_PARENTESE expressao FECHA_PARENTESE
+    (22) cmd -> . ID resto_ident
+    (19) cmd_cond -> . IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa
+    (20) cmd_cond -> . WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE
+    (8) dc -> . var mais_cmds
+    (47) vazio -> .
+    (9) var -> . tipo vars
+    (13) tipo -> . DOUBLE
+
+    SOUT            shift and go to state 23
+    ID              shift and go to state 17
+    IF              shift and go to state 24
+    WHILE           shift and go to state 25
+    FECHA_CHAVE     reduce using rule 47 (vazio -> .)
+    DOUBLE          shift and go to state 28
+
+    cmds                           shift and go to state 120
+    cmd                            shift and go to state 19
+    cmd_cond                       shift and go to state 20
+    dc                             shift and go to state 21
+    vazio                          shift and go to state 22
+    var                            shift and go to state 26
+    tipo                           shift and go to state 27
+
+state 116
+
+    (4) params -> tipo ID mais_params .
+
+    FECHA_PARENTESE reduce using rule 4 (params -> tipo ID mais_params .)
+
+
+state 117
+
+    (6) mais_params -> VIRGULA . params
+    (4) params -> . tipo ID mais_params
+    (5) params -> . vazio
+    (13) tipo -> . DOUBLE
+    (47) vazio -> .
+
+    DOUBLE          shift and go to state 28
+    FECHA_PARENTESE reduce using rule 47 (vazio -> .)
+
+    params                         shift and go to state 121
+    tipo                           shift and go to state 107
+    vazio                          shift and go to state 109
+
+state 118
+
+    (7) mais_params -> vazio .
+
+    FECHA_PARENTESE reduce using rule 7 (mais_params -> vazio .)
+
+
+state 119
+
+    (2) metodo -> PUBLIC STATIC tipo ID ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE . cmds RETURN expressao PONTO_VIRGULA FECHA_CHAVE
+    (14) cmds -> . cmd mais_cmds
+    (15) cmds -> . cmd_cond cmds
+    (16) cmds -> . dc
+    (17) cmds -> . vazio
+    (21) cmd -> . SOUT ABRE_PARENTESE expressao FECHA_PARENTESE
+    (22) cmd -> . ID resto_ident
+    (19) cmd_cond -> . IF ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE pfalsa
+    (20) cmd_cond -> . WHILE ABRE_PARENTESE condicao FECHA_PARENTESE ABRE_CHAVE cmds FECHA_CHAVE
+    (8) dc -> . var mais_cmds
+    (47) vazio -> .
+    (9) var -> . tipo vars
+    (13) tipo -> . DOUBLE
+
+    SOUT            shift and go to state 23
+    ID              shift and go to state 17
+    IF              shift and go to state 24
+    WHILE           shift and go to state 25
+    RETURN          reduce using rule 47 (vazio -> .)
+    DOUBLE          shift and go to state 28
+
+    tipo                           shift and go to state 27
+    cmds                           shift and go to state 122
+    cmd                            shift and go to state 19
+    cmd_cond                       shift and go to state 20
+    dc                             shift and go to state 21
+    vazio                          shift and go to state 22
+    var                            shift and go to state 26
+
+state 120
+
+    (23) pfalsa -> ELSE ABRE_CHAVE cmds . FECHA_CHAVE
+
+    FECHA_CHAVE     shift and go to state 123
+
+
+state 121
+
+    (6) mais_params -> VIRGULA params .
+
+    FECHA_PARENTESE reduce using rule 6 (mais_params -> VIRGULA params .)
+
+
+state 122
+
+    (2) metodo -> PUBLIC STATIC tipo ID ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE cmds . RETURN expressao PONTO_VIRGULA FECHA_CHAVE
+
+    RETURN          shift and go to state 124
+
+
+state 123
+
+    (23) pfalsa -> ELSE ABRE_CHAVE cmds FECHA_CHAVE .
+
+    SOUT            reduce using rule 23 (pfalsa -> ELSE ABRE_CHAVE cmds FECHA_CHAVE .)
+    ID              reduce using rule 23 (pfalsa -> ELSE ABRE_CHAVE cmds FECHA_CHAVE .)
+    IF              reduce using rule 23 (pfalsa -> ELSE ABRE_CHAVE cmds FECHA_CHAVE .)
+    WHILE           reduce using rule 23 (pfalsa -> ELSE ABRE_CHAVE cmds FECHA_CHAVE .)
+    DOUBLE          reduce using rule 23 (pfalsa -> ELSE ABRE_CHAVE cmds FECHA_CHAVE .)
+    FECHA_CHAVE     reduce using rule 23 (pfalsa -> ELSE ABRE_CHAVE cmds FECHA_CHAVE .)
+    RETURN          reduce using rule 23 (pfalsa -> ELSE ABRE_CHAVE cmds FECHA_CHAVE .)
+
+
+state 124
+
+    (2) metodo -> PUBLIC STATIC tipo ID ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE cmds RETURN . expressao PONTO_VIRGULA FECHA_CHAVE
+    (35) expressao -> . termo outros_termos
+    (36) termo -> . op_un fator mais_fatores
+    (37) op_un -> . SUBTRACAO
+    (38) op_un -> . vazio
+    (47) vazio -> .
+
+    SUBTRACAO       shift and go to state 47
+    ID              reduce using rule 47 (vazio -> .)
+    NUMERO          reduce using rule 47 (vazio -> .)
+    ABRE_PARENTESE  reduce using rule 47 (vazio -> .)
+
+    expressao                      shift and go to state 125
+    termo                          shift and go to state 45
+    op_un                          shift and go to state 46
+    vazio                          shift and go to state 48
+
+state 125
+
+    (2) metodo -> PUBLIC STATIC tipo ID ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE cmds RETURN expressao . PONTO_VIRGULA FECHA_CHAVE
+
+    PONTO_VIRGULA   shift and go to state 126
+
+
+state 126
+
+    (2) metodo -> PUBLIC STATIC tipo ID ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE cmds RETURN expressao PONTO_VIRGULA . FECHA_CHAVE
+
+    FECHA_CHAVE     shift and go to state 127
+
+
+state 127
+
+    (2) metodo -> PUBLIC STATIC tipo ID ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE cmds RETURN expressao PONTO_VIRGULA FECHA_CHAVE .
+
+    FECHA_CHAVE     reduce using rule 2 (metodo -> PUBLIC STATIC tipo ID ABRE_PARENTESE params FECHA_PARENTESE ABRE_CHAVE cmds RETURN expressao PONTO_VIRGULA FECHA_CHAVE .)
+
