@@ -4,67 +4,73 @@ import ply.lex as lex
 class Analyzer:
     tokens = []
     position = 0
-    position_instruction = -1
-    posicaoMetodo = -1
-    escopos = [{}]
-    instructions = []
+    scopes = [{}]
+    methods = {}
+
     infoMetodo = ['', -1]
     
+    position_instruction = -1
+    posicaoMetodo = -1
+    instructions = []
+    
+    
     def get_type(self):
-        return self.tokens[Analyzer.position].type
+        return self.tokens[self.position].type
 
     def get_value(self):
-        return self.tokens[Analyzer.position].value
+        return self.tokens[self.position].value    
+     
+    def get_comparisons_type(self,types = []):
+        for  type in types:
+            print(f'{type} : {self.get_type()}')
+            if type != self.get_type():
+                self.position += 1
+                return False
+            self.position += 1
+        return True
     
-    def get_for_value_type(self,value_type):
-        if value_type == 0:
-            return Analyzer.get_type
-        else:
-            return Analyzer.get_value
+    def is_declared(self, variable):
+        for scope in self.scopes:
+            for key in scope.keys():
+                if key == variable:
+                    return True
+        return False
     
+    def set_declaration(self, variable):
+        self.scopes[-1][variable] = 0
+        
+    def add_scope(self):
+        self.scopes.append({})
+
+    def exit_scope(self):
+        self.scopes.pop()
+
+    def is_declared_methods(self, variable):
+            for key in self.methods.keys():
+                if key == variable:
+                    return True
+            return False
+    
+    def add_instruction(self,instruction, value = ''):
+        self.instructions.append([instruction,value])
+        self.position_instruction += 1
+        #if instrucao == 'PARA':
+        #    self.posicaoMetodo = self.posicaoInstrucao+1
+
+    
+'''    
     def addInstrucao(self,instrucao, valor = ''):
         self.instrucoes.append([instrucao,valor])
         self.posicaoInstrucao += 1
         if instrucao == 'PARA':
             self.posicaoMetodo = self.posicaoInstrucao+1
-
-    def add_instruction(self,instruction, value = ''):       
-        if instruction == value or value == '':
-            self.instructions.append([instruction,value])
-            self.position_instruction += 1
-            return True
-        return False
-        #if instrucao == 'PARA':
-        #    self.posicaoMetodo = self.posicaoInstrucao+1
-        
-    def get_comparisons(self,instructions = [], value_type = []):
-        for i, instruction in enumerate(instructions):
-            if instruction != Analyzer.get_for_value_type(value_type[i]):
-                self.position_instruction += 1
-                return False
-            self.position_instruction += 1
-        return True
 '''
-    def isDeclared(self, variavel):
-        for escopo in self.escopos:
-            for chave in escopo.keys():
-                if chave == variavel:
-                    return True
-        return False
-    
-    def declare(self, variavel):
-        self.escopos[-1][variavel] = ''
-
-    def exitEscopo(self):
-        self.escopos.pop()
-
-    def addEscopo(self):
-        self.escopos.append({})
-'''
-
     
 
 
+    
+
+analyzer = Analyzer()
 
 
 var_map = {}
@@ -157,269 +163,441 @@ def generateTokens(code):
 
 
 
-def p_PROG(p):
-    '''PROG : Public Class Id LeftKey Public Static Void Main LeftParenthesis String LeftBracket RightBracket Args RightParenthesis LeftKey CMDS RightKey METODO RightKey'''
-    print("Entrando em PROG")
-    
-    p[0] = ("PROG", p[3], p[16], p[18])
-    pass
-
 def PROG():
+
+
+    analyzer.add_instruction('INPP')
+    print(analyzer.instructions)
     result = True
-    result = result and Analyzer.get_comparisons(['Public', 'Class'],[1,1])
+
+    result = result and analyzer.get_comparisons_type(['Public', 'Class'])
+
+    analyzer.set_declaration(analyzer.get_value())
     
-    result = result and Analyzer.get_comparisons(['Id', 'LeftKey ', 'Public', 'Static', 'Void', 'Main', 'LeftParenthesis', 'String', 'LeftBracket', 'RightBracket', 'Args', 'RightParenthesis', 'LeftKey'],[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    result = result and analyzer.get_comparisons_type(['Id', 'LeftKey', 'Public', 'Static', 'Void', 'Main', 'LeftParenthesis', 'String', 'LeftBracket', 'RightBracket', 'Args', 'RightParenthesis', 'LeftKey'])
+    
+    analyzer.add_scope()
+
+    result = result and CMDS()
+    
+    result = result and analyzer.get_comparisons_type(['RightKey'])
+    
+    result = result and METODO()
+    
+    result = result and analyzer.get_comparisons_type(['RightKey'])
     
     return result
 
-def p_METODO(p):
-    '''METODO : Public Static Double Id LeftParenthesis PARAMS RightParenthesis LeftKey CMDS Return EXPRESSAO Semicolon RightKey
-              | VOID'''
-    print("Entrando em METODO")
+
+def CMDS():
+
+    value_type = analyzer.get_type()
+    if value_type == "Double":
+        #analyzer.position += 1
+        result = analyzer.get_comparisons_type(['Double']) and VARS() and MAIS_CMDS()
+
+        return result
+    elif  value_type == "Id" or value_type == "Print":
+        
+        return  CMD() and MAIS_CMDS()  
+    elif value_type == 'If' or value_type == 'While':
+
+        return CMD_COND() and CMDS()
     
-    if len(p) > 2:
-        p[0] = ("METODO", p[3], p[4], p[6], p[9], p[11])
+    
+    return True
+
+
+def CMD():
+    value_type = analyzer.get_type()
+    
+    if value_type == "Print":
+        result = analyzer.get_comparisons_type(['Print', 'LeftParenthesis']) and EXPRESSAO() and analyzer.get_comparisons_type(['RightParenthesis'])
+        analyzer.add_instruction('IMPR')
+        return result
     else:
-        p[0] = ("METODO", None)
-    pass
+        
+        value_id = analyzer.get_value()
+        analyzer.get_comparisons_type(['Id'])
+        return RESTO_IDENT(value_id)
 
-def p_PARAMS(p):
-    '''PARAMS : Double Id MAIS_PARAMS
-              | VOID'''
-    print("Entrando em PARAMS")
+def RESTO_IDENT(value_id):
     
-    if len(p) > 2:
-        p[0] = ("PARAMS", p[1], p[2], p[3])
+    value_type = analyzer.get_type()
+
+    if value_type == "Assignment":
+        if not analyzer.is_declared(value_id):
+            print(f"Semantic error: variable '{value_id}' is not declared.")
+            return False
+        result = analyzer.get_comparisons_type(['Assignment']) and EXP_IDENT()
+
+        analyzer.add_instruction('ARMZ', value_id)
+
+        return result
+    
+    #if analyzer.is_declared_methods(analyzer.get_value()):
+    #    print(f"Semantic error: method has more than one name.")
+    #    return False
+
+    analyzer.add_instruction('PSHR') 
+    savePoint = analyzer.position_instruction
+
+    qtde_args = ARGUMENTOS()
+
+    #if qtde_args != analisador.infoMetodo[1]:
+        #print(f"Erro de sintaxe na linha {analisador.tokens[analisador.posicao].lineno - 18}: {qtde_args} não é número de argumentos esperado pelo método.")
+        #return False
+    
+    analyzer.add_instruction('PSHR','?') 
+
+    #analisador.addInstrucao('CHPR', analisador.infoMetodo[0])
+
+    analyzer.instructions[savePoint][1] = analyzer.position_instruction + 1
+    
+    return analyzer.get_comparisons_type(['LeftParenthesis']) and ARGUMENTOS() and analyzer.get_comparisons_type(['RightParenthesis'])
+
+    
+    if id != analisador.infoMetodo[0]:
+        print(f"Erro de sintaxe na linha {analisador.tokens[analisador.posicao].lineno - 18}: '{id}' não é o nome de uma chamada de método válido.")
+        return False
+    analisador.posicao += 1
+
+    analisador.addInstrucao('PSHR') 
+    savePoint = analisador.posicaoInstrucao
+
+    qtde_args = argumentos(0)
+    if qtde_args != analisador.infoMetodo[1]:
+        print(f"Erro de sintaxe na linha {analisador.tokens[analisador.posicao].lineno - 18}: {qtde_args} não é número de argumentos esperado pelo método.")
+        return False
+    analisador.addInstrucao('CHPR', analisador.infoMetodo[0])
+
+    analisador.instrucoes[savePoint][1] = analisador.posicaoInstrucao + 1
+    analisador.posicao += 1
+    ''''''
+
+    return True
+
+def ARGUMENTOS():
+    
+    value_type = analyzer.get_type()
+    
+    if value_type == "Id":
+        value = analyzer.get_value()
+        
+        if not analyzer.is_declared(value):
+            print(f"Semantic error: variable '{value}' not is declared.")
+            return False
+        
+        result = analyzer.get_comparisons_type(['Id'])
+        
+        analyzer.add_instruction('CRVL', value)
+
+        
+        return result and MAIS_IDENT()
+     
+    return True #qtde
+
+
+def MAIS_IDENT():
+    '''
+    value = analisador.getValue()
+
+    if value == ',':
+        analisador.posicao += 1
+        return argumentos(qtde)
+    return qtde 
+    ''' 
+    value_type = analyzer.get_type()
+    
+    if value_type == 'Comma':
+        return analyzer.get_comparisons_type(['Comma']) and ARGUMENTOS()
+    
+    return True
+
+def EXP_IDENT():
+    value_type = analyzer.get_type()
+
+    if value_type == "LerDouble":
+        analyzer.add_instruction('LEIT')
+
+        return analyzer.get_comparisons_type(['LerDouble', 'LeftParenthesis', 'RightParenthesis']) 
+    #analisador.posicao -= 1
+    return EXPRESSAO()
+
+def MAIS_CMDS():
+    result = analyzer.get_comparisons_type(['Semicolon'])
+    
+    value_type = analyzer.get_type()
+    
+    if   value_type == 'If' or value_type == 'While' or value_type == "Print" or value_type == "Id" or value_type == "Double":
+        return CMDS()
+    
+    return result
+
+def CMD_COND():
+    value_type = analyzer.get_type()
+
+    if value_type == 'While':
+        analyzer.add_scope()
+
+        savePoint = analyzer.position_instruction + 1
+
+        result = analyzer.get_comparisons_type(['While','LeftParenthesis']) and CONDICAO() and analyzer.get_comparisons_type(['RightParenthesis','LeftKey'])
+        
+        analyzer.add_instruction('DSVF')
+        savePointDSVF = analyzer.position_instruction
+        
+        result = result and CMDS()
+
+        analyzer.add_instruction('DSVI', savePoint)
+        analyzer.instructions[savePointDSVF][1] = analyzer.position_instruction + 1
+
+
+        result = result and analyzer.get_comparisons_type(['RightKey'])
+
+        analyzer.exit_scope()
+
+
+        return result
+
+    analyzer.add_scope()
+
+    savePoint = analyzer.position_instruction + 1
+
+    result = analyzer.get_comparisons_type(['If','LeftParenthesis']) and CONDICAO()
+
+    analyzer.add_instruction('DSVF')
+    savePointDSVF = analyzer.position_instruction
+
+    result = result and analyzer.get_comparisons_type(['RightParenthesis','LeftKey']) and CMDS() and analyzer.get_comparisons_type(['RightKey'])
+
+    analyzer.exit_scope()
+
+    
+    value_type = analyzer.get_type()
+    
+    
+    if(value_type != "Else"):
+            analyzer.instructions[savePointDSVF][1] = analyzer.position_instruction + 1
+            return result
+    
+    analyzer.add_instruction('DSVI')
+    savePointDSVI = analyzer.position_instruction
+
+    analyzer.instructions[savePointDSVF][1] = analyzer.position_instruction + 1
+
+    
+    result = result and PFALSE()
+
+    analyzer.instructions[savePointDSVI][1] = analyzer.position_instruction + 1
+    
+    return result
+
+
+def PFALSE():
+
+    analyzer.add_scope()
+
+    result = analyzer.get_comparisons_type(['Else','LeftKey']) and CMDS() and analyzer.get_comparisons_type(['RightKey'])
+
+    analyzer.exit_scope()
+
+    return result 
+
+def CONDICAO():
+    result = EXPRESSAO()
+    value = analyzer.get_value()
+    result = result and analyzer.get_comparisons_type(['Relational'])
+    
+    
+    if value == "!=":       
+        analyzer.add_instruction('CDES')
+    elif value == "==":
+        analyzer.add_instruction('CPIG')
+    elif value == ">":
+        analyzer.add_instruction('CPMA')
+    elif value == "<=":
+        analyzer.add_instruction('CPMI')
+    elif value == ">=":
+        analyzer.add_instruction('CMAI') 
+    elif value == "<":
+        analyzer.add_instruction('CPME')
+     
+    
+    
+    return result and EXPRESSAO()
+
+def VARS():
+    value = analyzer.get_value()
+    
+    if analyzer.is_declared(value):
+        print(f"Semantic error: variable '{value}' is declared.")
+        return False
+    analyzer.set_declaration(value)
+    analyzer.add_instruction('ALME', value)
+                      
+    return analyzer.get_comparisons_type(['Id']) and MAIS_VARS()
+
+def MAIS_VARS():
+    value_type = analyzer.get_type()
+
+    if value_type == 'Comma':
+        return analyzer.get_comparisons_type(['Comma']) and VARS()
+    return True
+
+def EXPRESSAO():
+    return TERMO() and MAIS_TERMOS()
+
+def TERMO():
+    value_type = analyzer.get_type()
+
+    if value_type == 'Sub':
+
+        
+        result = analyzer.get_comparisons_type(['Sub']) and FATOR() and MAIS_FATORES()
+        analyzer.add_instruction('INVE')
+
+
+        return result
+    
+    return FATOR() and MAIS_FATORES()
+
+def MAIS_TERMOS():
+    value_type = analyzer.get_type()
+
+    if   value_type == 'Sub' or value_type == 'Add':
+        if value_type == 'Sub':
+            analyzer.get_comparisons_type(['Sub'])
+            operation = 'SUBT'
+            
+        if value_type == 'Add':
+            analyzer.get_comparisons_type(['Add'])
+            operation = 'SOMA'
+            
+
+        if TERMO():
+            value_type = analyzer.get_type()
+            analyzer.add_instruction(operation)
+
+
+            if value_type == 'Add' or value_type == 'Sub':
+                return MAIS_TERMOS()
+            return True
+        return False
+    return True
+
+def FATOR():
+    value_type = analyzer.get_type()
+    value = analyzer.get_value()
+    
+    if value_type == 'Number':
+        result = analyzer.get_comparisons_type(['Number'])
+        analyzer.add_instruction('CRCT', value)
+
+    elif value_type == 'Id':
+
+        if not analyzer.is_declared(value):
+            print(f"Semantic error: variable '{value}' is declared.")
+            return False
+        
+        result = analyzer.get_comparisons_type(['Id'])
+
+        analyzer.add_instruction('CRVL', value)
+        
     else:
-        p[0] = ("PARAMS", None)
-    pass
-
-def p_MAIS_PARAMS(p):
-    '''MAIS_PARAMS : Comma PARAMS
-                   | VOID'''
-    print("Entrando em MAIS_PARAMS")
+        result = analyzer.get_comparisons_type(['LeftParenthesis'])
+        return result and EXPRESSAO() and analyzer.get_comparisons_type(['RightParenthesis'])
+    return True
     
-    if len(p) > 2:
-        p[0] = ("MAIS_PARAMS", p[2])
-    else:
-        p[0] = ("MAIS_PARAMS", None)
-    pass
+def MAIS_FATORES():
+    value_type = analyzer.get_type()
+    value = analyzer.get_value()
 
-def p_DC(p):
-    '''DC : VAR MAIS_CMDS'''
-    print("Entrando em DC")
+    if value_type == 'Mult':
+        operation = 'MULT'
+        if value == '/':
+            operation = 'DIVI'
+        
+        if analyzer.get_comparisons_type(['Mult']) and FATOR():
+            value_type = analyzer.get_type()
+
+            analyzer.add_instruction(operation)
+            
+            if value_type == 'Mult':
+                return MAIS_FATORES()
+            return True
+        
+        return False
+    return True
+
+def METODO():
     
-    p[0] = ("DC", p[1], p[2])
-    pass
+    analyzer.exit_scope()
+    analyzer.add_scope()
 
-def p_VAR(p):
-    '''VAR : Double VARS'''
-    print(f"Entrando em VAR")
+    analyzer.add_instruction('PARA')
+
+    value_type = analyzer.get_type()
+    if value_type == 'Public':
     
-    p[0] = ("VAR", p[1], p[2])
-    pass
+        result = analyzer.get_comparisons_type(['Public', 'Static', 'Double'])
 
-def p_VARS(p):
-    '''VARS : Id MAIS_VAR'''
-    print(f"Entrando em VARS: {p[1]}")
+        analyzer.methods[analyzer.get_value()] = analyzer.position_instruction
+        
+        result = result and analyzer.get_comparisons_type(['Id', 'LeftParenthesis'])
+        
+        result = result and  PARAMS() and analyzer.get_comparisons_type(['RightParenthesis', 'LeftKey']) and CMDS() and analyzer.get_comparisons_type(['Return'])
     
-    p[0] = ("VARS", p[1], p[2])
-    pass
+        result = result and EXPRESSAO() and analyzer.get_comparisons_type(['Semicolon', 'RightKey'])
 
-def p_MAIS_VAR(p):
-    '''MAIS_VAR : Comma VARS
-                | VOID'''
-    print("Entrando em MAIS_VAR")
+        analyzer.add_instruction('RTPR')
+
+        return result
+    return True
+
+
+def PARAMS():
     
-    if len(p) > 2:
-        p[0] = ("MAIS_VAR", p[2])
-    else:
-        p[0] = ("MAIS_VAR", None)
-    pass
+    value_type = analyzer.get_type()
 
-def p_CMDS(p):
-    '''CMDS : CMD MAIS_CMDS
-            | CMD_COND CMDS
-            | DC
-            | VOID'''
-    print("Entrando em CMDS")
-    
-    if len(p) == 3:
-        p[0] = ("CMDS", p[1], p[2])
-    elif len(p) == 2:
-        p[0] = ("CMDS", p[1])
-    else:
-        p[0] = ("CMDS", None)
-    pass
+    if value_type == "Double":
+        result = analyzer.get_comparisons_type(['Double'])
+        
+        value = analyzer.get_value()
+        
+        result = analyzer.get_comparisons_type(['Id'])
+        
+        if analyzer.is_declared(value):
+            print(f"Semantic error: variable '{value}' is declared.")
+            return False
+        
+        analyzer.set_declaration(value)
+        
+        result  = result and MAIS_PARAMS()
 
-def p_MAIS_CMDS(p):
-    '''MAIS_CMDS : Semicolon CMDS'''
-    print("Entrando em MAIS_CMDS")
-    
-    p[0] = ("MAIS_CMDS", p[2])
-    pass
-
-def p_CMD_COND(p):
-    '''CMD_COND : If LeftParenthesis CONDICAO RightParenthesis LeftKey CMDS RightKey PFALSA
-                | While LeftParenthesis CONDICAO RightParenthesis LeftKey CMDS RightKey'''
-    print("Entrando em CMD_COND")
-    
-    if p[1] == 'if':
-        p[0] = ("CMD_COND_IF", p[3], p[6], p[8])
-    else:
-        p[0] = ("CMD_COND_WHILE", p[3], p[6])
-
-    pass
-
-def p_CMD(p):
-    '''CMD : Print LeftParenthesis EXPRESSAO RightParenthesis
-           | Id RESTO_IDENT'''
-    print("Entrando em CMD")
-    
-    if len(p) == 8:
-        p[0] = ("CMD_PRINTLN_EXPR", p[7])
-    else:
-        p[0] = ("CMD_ASSIGN", p[1], p[2])
-    pass
-
-def p_PFALSA(p):
-    '''PFALSA : Else LeftKey CMDS RightKey
-              | VOID'''
-    print("Entrando em PFALSA")
-    
-    if len(p) > 2:
-        p[0] = ("PFALSA", p[3])
-    else:
-        p[0] = ("PFALSA", None)
-    pass
-
-def p_RESTO_IDENT(p):
-    '''RESTO_IDENT : Assignment EXP_IDENT
-                   | LeftParenthesis LISTA_ARG RightParenthesis''' 
-    print("Entrando em RESTO_IDENT")
-    
-    if p[1] == '=':
-        p[0] = ("ASSIGN_EXPR", p[2])
-    else:
-        p[0] = ("FUNC_CALL", p[2])
-    pass
-
-def p_LISTA_ARG(p):
-    '''LISTA_ARG : ARGUMENTOS
-                 | VOID'''
-    print("Entrando em LISTA_ARG")
-    
-    p[0] = p[1]
-    pass
-
-def p_ARGUMENTOS(p):
-    '''ARGUMENTOS : Id MAIS_IDENT'''
-    print("Entrando em ARGUMENTOS")
-    
-    p[0] = ("ARGUMENTOS", p[1], p[2])
-    pass
-
-def p_MAIS_IDENT(p):
-    '''MAIS_IDENT : Comma ARGUMENTOS
-                  | VOID'''
-    print("Entrando em MAIS_IDENT")
-    
-    if len(p) > 2:
-        p[0] = ("MAIS_IDENT", p[2])
-    else:
-        p[0] = None
-    pass
-
-def p_EXP_IDENT(p):
-    '''EXP_IDENT : EXPRESSAO
-                 | LerDouble LeftParenthesis RightParenthesis'''
-    print("Entrando em EXP_IDENT")
-    
-    if len(p) == 2:
-        p[0] = ("EXP_IDENT", p[1])
-    else:
-        p[0] = ("EXP_IDENT_FUNC", "lerDouble")
-    pass
-
-def p_CONDICAO(p):
-    '''CONDICAO : EXPRESSAO Relational EXPRESSAO'''
-    print("Entrando em CONDICAO")
-    
-    p[0] = ("CONDICAO", p[1], p[2], p[3])
-    pass
-
-def p_EXPRESSAO(p):
-    '''EXPRESSAO : TERMO OUTROS_TERMOS'''
-    print("Entrando em EXPRESSAO")
-    
-    p[0] = ("EXPRESSAO", p[1], p[2])
-    pass
-
-def p_TERMO(p):
-    '''TERMO : OP_UN FATOR MAIS_FATORES'''
-    print("Entrando em TERMO")
-    
-    p[0] = ("TERMO", p[1], p[2], p[3])
-    pass
-
-def p_OP_UN(p):
-    '''OP_UN : Sub
-             | VOID'''
-    print("Entrando em OP_UN")
-    
-    p[0] = p[1] if p[1] == '-' else None
-    pass
-
-def p_FATOR(p):
-    '''FATOR : Id
-             | Number
-             | LeftParenthesis EXPRESSAO RightParenthesis'''
-    print("Entrando em FATOR")
-    
-    if len(p) == 2:
-        p[0] = ("FATOR",p[1])
-    else:
-        p[0] = ("NEW_EXPRESSAO",p[2])
-    pass
-
-def p_OUTROS_TERMOS(p):
-    '''OUTROS_TERMOS : Add TERMO OUTROS_TERMOS
-                     | Sub TERMO OUTROS_TERMOS
-                     | VOID'''
-    print("Entrando em OUTROS_TERMOS")
-    
-    if len(p) > 2:
-        p[0] = ("OUTROS_TERMOS", p[1], p[2], p[3])
-    else:
-        p[0] = None
-    pass
-
-def p_MAIS_FATORES(p):
-    '''MAIS_FATORES : Mult FATOR MAIS_FATORES
-                    | VOID'''
-    print("Entrando em MAIS_FATORES")
-    
-    if len(p) > 2:
-        p[0] = ("MAIS_FATORES", p[1], p[2], p[3])
-    else:
-        p[0] = None
-    pass
-
-def p_VOID(p):
-    '''VOID : '''
-    print("Entrando em VOID")
-    pass
+        analyzer.add_instruction('ALME', value)
+        analyzer.add_instruction('ARMZ', value)
 
 
+        return result
 
-parser = yacc.yacc()
+    return True
+
+def MAIS_PARAMS():
+    value_type = analyzer.get_type()
+
+    if value_type == 'Comma':       
+        return analyzer.get_comparisons_type(['Comma']) and PARAMS()
+    return True
+
 
 def parse_tokens_and_generate_object_code(tokens):
-    Analyzer.tokens = tokens
-    print("ola")
-    return PROG()
+    analyzer.tokens = tokens
 
+    result =  PROG()
 
-def analiseSintatica(codigo):
-    
-    return parser.parse(codigo)
+    for instruction in analyzer.instructions:
+        print(instruction)
+
+    return result
+

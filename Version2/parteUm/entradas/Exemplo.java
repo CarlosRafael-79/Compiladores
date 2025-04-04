@@ -1,19 +1,11 @@
 public class Exemplo {
     public static void main ( String [ ] args ){
-        double n, y, z;
-        double n, a, b;
-        n = 10;
-        a = 0;
-        b = 1;
-        printFibonacci(n, a, b);
+        double a,b;
+        amor(a,b);
     }
-    public static double printFibonacci(double n, double a, double  b){
-        if (n > 0) {
-            System.out.println(a);
-            n = n-1;
-            a = a + b;
-            printFibonacci(n, b, a);
-        }
-        return 0.0;
+    public static double teste(double x, double y){
+        x = x+(2*3);
+        return 10 ; 
     }
+
 }

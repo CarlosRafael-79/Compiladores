@@ -16,7 +16,7 @@ if __name__ == '__main__':
     print(parse_tokens_and_generate_object_code(lex))
     #resultado = analiseSintatica(conteudo)
     #print(resultado)
-    #print("\n\n")
+    #print("\n\n") 
 '''
     if not resultado[0] :
         instrucoes = getInstrucoes(lex, resultado[1])
