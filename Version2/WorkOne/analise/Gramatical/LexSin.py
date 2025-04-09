@@ -5,12 +5,8 @@ class Analyzer:
     tokens = []
     position = 0
     scopes = [{}]
-    methods = {}
-
-    infoMetodo = ['', -1]
-    
+    methods = {}   
     position_instruction = -1
-    posicaoMetodo = -1
     instructions = []
     
     
@@ -44,27 +40,11 @@ class Analyzer:
 
     def exit_scope(self):
         self.scopes.pop()
-
-    def is_declared_methods(self, variable):
-            for key in self.methods.keys():
-                if key == variable:
-                    return True
-            return False
     
     def add_instruction(self,instruction, value = ''):
         self.instructions.append([instruction,value])
         self.position_instruction += 1
-        #if instrucao == 'PARA':
-        #    self.posicaoMetodo = self.posicaoInstrucao+1
 
-    
-'''    
-    def addInstrucao(self,instrucao, valor = ''):
-        self.instrucoes.append([instrucao,valor])
-        self.posicaoInstrucao += 1
-        if instrucao == 'PARA':
-            self.posicaoMetodo = self.posicaoInstrucao+1
-'''
     
 
 
@@ -78,8 +58,8 @@ var_map = {}
 token_map = {
     
     'public': 'Public', 'main': 'Main', 'static': 'Static', 'class': 'Class', 'void': 'Void',
-    'if': 'If', 'else': 'Else', 'while': 'While', 'return': 'Return',  'double': 'Double',
-    'String': 'String', 'lerDouble': 'LerDouble', 'args': 'Args'  
+    'if': 'If', 'else': 'Else', 'while': 'While', 'double': 'Double','String': 'String', 
+    'lerDouble': 'LerDouble', 'args': 'Args'  
 }
 
 tokens = [
@@ -167,7 +147,7 @@ def PROG():
 
 
     analyzer.add_instruction('INPP')
-    print(analyzer.instructions)
+
     result = True
 
     result = result and analyzer.get_comparisons_type(['Public', 'Class'])
@@ -178,15 +158,11 @@ def PROG():
     
     analyzer.add_scope()
 
-    result = result and CMDS()
-    
-    result = result and analyzer.get_comparisons_type(['RightKey'])
-    
-    result = result and METODO()
-    
-    result = result and analyzer.get_comparisons_type(['RightKey'])
-    
-    return result
+    result = result and CMDS()   
+
+    analyzer.add_instruction('PARA')
+
+    return result and analyzer.get_comparisons_type(['RightKey', 'RightKey'])
 
 
 def CMDS():
@@ -239,43 +215,20 @@ def RESTO_IDENT(value_id):
     #    print(f"Semantic error: method has more than one name.")
     #    return False
 
-    analyzer.add_instruction('PSHR') 
-    savePoint = analyzer.position_instruction
+    #analyzer.add_instruction('PSHR') 
+    #savePoint = analyzer.position_instruction
 
-    qtde_args = ARGUMENTOS()
 
     #if qtde_args != analisador.infoMetodo[1]:
         #print(f"Erro de sintaxe na linha {analisador.tokens[analisador.posicao].lineno - 18}: {qtde_args} não é número de argumentos esperado pelo método.")
         #return False
     
-    analyzer.add_instruction('PSHR','?') 
+    #analyzer.add_instruction('PSHR','?') 
 
     #analisador.addInstrucao('CHPR', analisador.infoMetodo[0])
 
-    analyzer.instructions[savePoint][1] = analyzer.position_instruction + 1
     
     return analyzer.get_comparisons_type(['LeftParenthesis']) and ARGUMENTOS() and analyzer.get_comparisons_type(['RightParenthesis'])
-
-    
-    if id != analisador.infoMetodo[0]:
-        print(f"Erro de sintaxe na linha {analisador.tokens[analisador.posicao].lineno - 18}: '{id}' não é o nome de uma chamada de método válido.")
-        return False
-    analisador.posicao += 1
-
-    analisador.addInstrucao('PSHR') 
-    savePoint = analisador.posicaoInstrucao
-
-    qtde_args = argumentos(0)
-    if qtde_args != analisador.infoMetodo[1]:
-        print(f"Erro de sintaxe na linha {analisador.tokens[analisador.posicao].lineno - 18}: {qtde_args} não é número de argumentos esperado pelo método.")
-        return False
-    analisador.addInstrucao('CHPR', analisador.infoMetodo[0])
-
-    analisador.instrucoes[savePoint][1] = analisador.posicaoInstrucao + 1
-    analisador.posicao += 1
-    ''''''
-
-    return True
 
 def ARGUMENTOS():
     
@@ -295,7 +248,7 @@ def ARGUMENTOS():
         
         return result and MAIS_IDENT()
      
-    return True #qtde
+    return True 
 
 
 def MAIS_IDENT():
@@ -409,6 +362,7 @@ def CONDICAO():
     value = analyzer.get_value()
     result = result and analyzer.get_comparisons_type(['Relational'])
     
+    result = result and EXPRESSAO()
     
     if value == "!=":       
         analyzer.add_instruction('CDES')
@@ -425,7 +379,7 @@ def CONDICAO():
      
     
     
-    return result and EXPRESSAO()
+    return result
 
 def VARS():
     value = analyzer.get_value()
@@ -497,7 +451,7 @@ def FATOR():
     elif value_type == 'Id':
 
         if not analyzer.is_declared(value):
-            print(f"Semantic error: variable '{value}' is declared.")
+            print(f"Semantic error: variable '{value}'is not declared.")
             return False
         
         result = analyzer.get_comparisons_type(['Id'])
@@ -530,65 +484,6 @@ def MAIS_FATORES():
         return False
     return True
 
-def METODO():
-    
-    analyzer.exit_scope()
-    analyzer.add_scope()
-
-    analyzer.add_instruction('PARA')
-
-    value_type = analyzer.get_type()
-    if value_type == 'Public':
-    
-        result = analyzer.get_comparisons_type(['Public', 'Static', 'Double'])
-
-        analyzer.methods[analyzer.get_value()] = analyzer.position_instruction
-        
-        result = result and analyzer.get_comparisons_type(['Id', 'LeftParenthesis'])
-        
-        result = result and  PARAMS() and analyzer.get_comparisons_type(['RightParenthesis', 'LeftKey']) and CMDS() and analyzer.get_comparisons_type(['Return'])
-    
-        result = result and EXPRESSAO() and analyzer.get_comparisons_type(['Semicolon', 'RightKey'])
-
-        analyzer.add_instruction('RTPR')
-
-        return result
-    return True
-
-
-def PARAMS():
-    
-    value_type = analyzer.get_type()
-
-    if value_type == "Double":
-        result = analyzer.get_comparisons_type(['Double'])
-        
-        value = analyzer.get_value()
-        
-        result = analyzer.get_comparisons_type(['Id'])
-        
-        if analyzer.is_declared(value):
-            print(f"Semantic error: variable '{value}' is declared.")
-            return False
-        
-        analyzer.set_declaration(value)
-        
-        result  = result and MAIS_PARAMS()
-
-        analyzer.add_instruction('ALME', value)
-        analyzer.add_instruction('ARMZ', value)
-
-
-        return result
-
-    return True
-
-def MAIS_PARAMS():
-    value_type = analyzer.get_type()
-
-    if value_type == 'Comma':       
-        return analyzer.get_comparisons_type(['Comma']) and PARAMS()
-    return True
 
 
 def parse_tokens_and_generate_object_code(tokens):
@@ -599,5 +494,5 @@ def parse_tokens_and_generate_object_code(tokens):
     for instruction in analyzer.instructions:
         print(instruction)
 
-    return result
+    return [result, analyzer.instructions]
 
