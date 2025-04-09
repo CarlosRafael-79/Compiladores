@@ -141,5 +141,5 @@ class CodeInterpreter:
 
 if __name__ == '__main__':
     interpreter = CodeInterpreter()
-    interpreter.load_code('WorkOne/code.txt')
+    interpreter.load_code('work_one/code.txt')
     interpreter.execute()

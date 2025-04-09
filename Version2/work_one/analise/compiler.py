@@ -1,4 +1,3 @@
-import ply.yacc as yacc
 import ply.lex as lex
 
 class Analyzer:
@@ -54,7 +53,7 @@ analyzer = Analyzer()
 
 
 var_map = {}
-# Mapeamento de palavras reservadas, símbolos e operadores para tokens
+
 token_map = {
     
     'public': 'Public', 'main': 'Main', 'static': 'Static', 'class': 'Class', 'void': 'Void',
@@ -69,7 +68,6 @@ tokens = [
 ] + list(token_map.values())
 
 
-# Definição de tokens para símbolos individuais
 t_LeftParenthesis = r'\('
 t_RightParenthesis = r'\)'
 t_LeftBracket = r'\['
@@ -82,42 +80,42 @@ t_Assignment = r'='
 t_Sub = r'-'
 t_Add = r'\+'
 
-# Expressões regulares para tokens simples
+
 t_Mult = r'[\*/]'
 t_ignore = ' \t\r\f'
 
-# Token para números (inteiros e decimais)
+
 def t_Number(t):
     r'\d+(\.\d+)?'
     t.value = float(t.value) if '.' in t.value else int(t.value)
     return t
 
-# Operadores relacionais
+
 def t_Relational(t):
     r'==|!=|<=|>=|<|>'
     return t
 
-# System.out.println
+
 def t_Print(t):
     r'System\.out\.println'
     return t
 
-# Identificadores e palavras reservadas
+
 def t_Id(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = token_map.get(t.value, 'Id')
     return t
 
 
-# Captura de novas linhas
+
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-# Ignorar comentários de linha (// ...) e de bloco (/* ... */)
+
 def t_COMMENT(t):
     r'//.*|/\*[\s\S]*?\*/'
-    pass  # Ignora o token
+    pass  
 
 def t_error(t):
     print(f"Lexical error in {t.lineno}: '{t.value[0]}'")
@@ -169,7 +167,7 @@ def CMDS():
 
     value_type = analyzer.get_type()
     if value_type == "Double":
-        #analyzer.position += 1
+
         result = analyzer.get_comparisons_type(['Double']) and VARS() and MAIS_CMDS()
 
         return result
@@ -210,24 +208,7 @@ def RESTO_IDENT(value_id):
         analyzer.add_instruction('ARMZ', value_id)
 
         return result
-    
-    #if analyzer.is_declared_methods(analyzer.get_value()):
-    #    print(f"Semantic error: method has more than one name.")
-    #    return False
 
-    #analyzer.add_instruction('PSHR') 
-    #savePoint = analyzer.position_instruction
-
-
-    #if qtde_args != analisador.infoMetodo[1]:
-        #print(f"Erro de sintaxe na linha {analisador.tokens[analisador.posicao].lineno - 18}: {qtde_args} não é número de argumentos esperado pelo método.")
-        #return False
-    
-    #analyzer.add_instruction('PSHR','?') 
-
-    #analisador.addInstrucao('CHPR', analisador.infoMetodo[0])
-
-    
     return analyzer.get_comparisons_type(['LeftParenthesis']) and ARGUMENTOS() and analyzer.get_comparisons_type(['RightParenthesis'])
 
 def ARGUMENTOS():
@@ -252,14 +233,6 @@ def ARGUMENTOS():
 
 
 def MAIS_IDENT():
-    '''
-    value = analisador.getValue()
-
-    if value == ',':
-        analisador.posicao += 1
-        return argumentos(qtde)
-    return qtde 
-    ''' 
     value_type = analyzer.get_type()
     
     if value_type == 'Comma':
@@ -274,7 +247,6 @@ def EXP_IDENT():
         analyzer.add_instruction('LEIT')
 
         return analyzer.get_comparisons_type(['LerDouble', 'LeftParenthesis', 'RightParenthesis']) 
-    #analisador.posicao -= 1
     return EXPRESSAO()
 
 def MAIS_CMDS():
